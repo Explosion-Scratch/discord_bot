@@ -6,6 +6,10 @@ jobs:
     name: Generate markdown
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+         ref: ${{ github.head_ref }}
       - run: sudo npm i -g jsdoc-to-markdown
       - run: ls
       - run: pwd
