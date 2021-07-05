@@ -93,6 +93,53 @@ bot.onready = () => {
 ```
 </details>
 
+# Getting started:
+
+To create a bot use 
+```js
+var bot = new Bot();
+```
+Now you need to log your bot into discord as follows:
+```js
+bot.init("YOUR_TOKEN_HERE");//Tokens can be gotten from the bots section of a discord developer application
+```
+Then set a prefix for your bot:
+```js
+bot.setPrefix("$$");
+```
+then add some commands!
+```js
+bot.addCommand({
+  run: ({ message }) => {
+    if (!message) {
+      return {
+        title: "🏓 Pong!",
+        description:
+          "Pong! I don't know how long that took because I forgot how to get the timestamp of an interaction! =D",
+      };
+    }
+    return {
+      title: "🏓 Pong!",
+      description: `🏓Latency is ${
+        Date.now() - message.createdTimestamp
+      }ms. API Latency is ${Math.round(client.ws.ping)}ms`,
+    };
+  },
+  title: "Ping",
+  name: "ping",
+  description: "Ping command!",
+  args: [],
+});
+```
+If you want slash commands then also add this:
+```js
+bot.addListener("ready", () => {
+  console.log("Bot ready");
+  bot.initSlash();
+})
+```
+
+
 
 # Documentation:
 ## Classes
