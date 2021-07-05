@@ -4,7 +4,7 @@
   "description": "Super simple and easy to use discord bot engine",
   "main": "index.js",
   "dependencies": {
-    "discord.js": "12.5.3",
+    "discord.js": "12.5.3"
   },
   "keywords": []
 }
