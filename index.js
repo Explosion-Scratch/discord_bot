@@ -1,3 +1,8 @@
+/**
+ * Class representing a discord bot.
+ * @class
+ * @classdesc A class that represents a discord bot.
+ */
 class Bot {
 	constructor() {
 		this.Discord = require("discord.js");
@@ -35,7 +40,8 @@ class Bot {
 	/**
 	 * Finds a user based on their discord tag, username, nickname or ID.
 	 * @param {Function|String} query The discord tag, find function, username, or user ID of the user to find.
-	 */
+	* @returns {DiscordUserObject} A discord.js object representing the user found. 
+	*/
 	findUser(query) {
 		console.log(JSON.stringify(this.client.users, null, 2));
 		if (typeof query === "function") {
@@ -58,15 +64,22 @@ class Bot {
 	 * Sends the user specified a message.
 	 * @param {String|Function} [user=last_user_of_bot] The query to find the user by (same as used in 'findUser'.)
 	 * @param {String|Embed|Object} msg A sendable message that can be send through discord.js
-	 */
+	* @returns {DiscordMessageObject} A discord.js message object. 
+	*/
 	dm(user, msg) {
 		user = user || this.info.author;
-		this.findUser(user).send(msg);
+		user = this.findUser(user)
+		if (user.error){
+			// Return the error
+			return user
+		}
+		return user.send(msg);
 	}
 	/**
 	 * Finds a channel based on a query.
 	 * @param {Function} query The find function to find the channel (this command still very much WIP.)
-	 */
+	* @returns {DiscordChannelObject} A discord.js channel object containing details about the channel found. 
+	*/
 	findChannel(query) {
 		return this.client.channels.cache.find(query);
 	}
@@ -228,13 +241,16 @@ class Bot {
 	 * @param {String} command.description Used as a default if the run function of the command returns nothing.
 	 * @param {Array} [command.args] A list of arguments for the command. Each should be an object containing name, description, and a required boolean. Also can have more options (See discord.js slash commands options documentation).
 	 * @param {Object} command.slashCommand Optional arguments to pass to discord.js slash command creation.
-	 */
+	* @returns {Object} The bot's commands. 
+	*/
 	addCommand(command) {
 		this.commands.push(command);
+		return this.commands
 	}
 	/**
-	 * Initiates the bot using an authentification token.
-	 * @param {String} token The authentification token used to log the bot in and make it work!
+	 * Initiates the bot using an authentication token.
+	 * @param {String} token The authentication token used to log the bot in and make it work!
+	 * @returns {Bot}
 	 */
 	init(token) {
 		token = token || this.config.BOT_TOKEN;
@@ -250,6 +266,7 @@ class Bot {
 	 * Sets the bot's prefix for use in message based commands (E.g. '#help').
 	 * Does not affect slash commands.
 	 * @param {String} prefix The new prefix for the bot.
+	 * @returns {Bot}
 	 */
 	setPrefix(prefix) {
 		if (!prefix) {
@@ -265,6 +282,7 @@ class Bot {
 	 * @param {String} prop The property to set.
 	 * Current config properties are: color, prefix, and guildId
 	 * @param {any} val The value to set the property to.
+	 * @returns {Bot} The bot.
 	 */
 	set(prop, val) {
 		if (!(prop && val)) {
@@ -286,11 +304,22 @@ class Bot {
 		};
 	}
 }
+/**
+ * Class that represents a command. Used by the bot to test and run commands. 
+ * Internal.
+ * @class
+ * @classdesc A class that represents a command.
+ */
 class Command {
 	constructor(command, prefix) {
 		this.command = command;
 		this.prefix = prefix;
 	}
+	/**
+	 * Tests a command on text or interaction arguments.
+	 * @param {String|Object} text The text or arguments (from an interaction) to test.
+	 * @returns {Object} An object which either contains {error: true, message: "MESSAGE_HERE"} or {error: false, ...arguments}, where arguments are the arguments that were parsed from the command.
+	 */
 	test(text) {
 		if (typeof text === "object") {
 			if (text.name !== this.command.name) {
@@ -346,6 +375,11 @@ class Command {
 		}
 		return { error: false, ...this.args };
 	}
+	/**
+	 * Runs a command using the specified arguments.
+	 * @param  {...any} args The arguments that are passed to the run function of the command
+	 * @returns {Object} An object with title and description for the embed which should be sent in response, or the return value of the command's run function if it is an object and represents a discord embed.
+	 */
 	run(...args) {
 		var _ = {};
 		if (this.command.run) {
