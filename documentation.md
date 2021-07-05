@@ -17,25 +17,26 @@ A class that represents a discord bot.
 **Kind**: global class  
 
 * [Bot](#Bot)
-    * [.findUser(query)](#Bot+findUser)
-    * [.dm([user], msg)](#Bot+dm)
-    * [.findChannel(query)](#Bot+findChannel)
+    * [.findUser(query)](#Bot+findUser) ⇒ <code>DiscordUserObject</code>
+    * [.dm([user], msg)](#Bot+dm) ⇒ <code>DiscordMessageObject</code>
+    * [.findChannel(query)](#Bot+findChannel) ⇒ <code>DiscordChannelObject</code>
     * [.addListener(event, callback)](#Bot+addListener)
     * [.dispatch(event, ...data)](#Bot+dispatch)
     * [.initSlash()](#Bot+initSlash)
     * [.runCommand(params)](#Bot+runCommand)
-    * [.addCommand(command)](#Bot+addCommand)
-    * [.init(token)](#Bot+init)
-    * [.setPrefix(prefix)](#Bot+setPrefix)
-    * [.set(prop, val)](#Bot+set)
+    * [.addCommand(command)](#Bot+addCommand) ⇒ <code>Object</code>
+    * [.init(token)](#Bot+init) ⇒ [<code>Bot</code>](#Bot)
+    * [.setPrefix(prefix)](#Bot+setPrefix) ⇒ [<code>Bot</code>](#Bot)
+    * [.set(prop, val)](#Bot+set) ⇒ [<code>Bot</code>](#Bot)
     * [.embed(opts)](#Bot+embed)
 
 <a name="Bot+findUser"></a>
 
-### bot.findUser(query)
+### bot.findUser(query) ⇒ <code>DiscordUserObject</code>
 Finds a user based on their discord tag, username, nickname or ID.
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
+**Returns**: <code>DiscordUserObject</code> - A discord.js object representing the user found.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -43,10 +44,11 @@ Finds a user based on their discord tag, username, nickname or ID.
 
 <a name="Bot+dm"></a>
 
-### bot.dm([user], msg)
+### bot.dm([user], msg) ⇒ <code>DiscordMessageObject</code>
 Sends the user specified a message.
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
+**Returns**: <code>DiscordMessageObject</code> - A discord.js message object.  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -55,10 +57,11 @@ Sends the user specified a message.
 
 <a name="Bot+findChannel"></a>
 
-### bot.findChannel(query)
+### bot.findChannel(query) ⇒ <code>DiscordChannelObject</code>
 Finds a channel based on a query.
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
+**Returns**: <code>DiscordChannelObject</code> - A discord.js channel object containing details about the channel found.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -111,10 +114,11 @@ Internal function to run a command in a channel, with a message or interaction. 
 
 <a name="Bot+addCommand"></a>
 
-### bot.addCommand(command)
+### bot.addCommand(command) ⇒ <code>Object</code>
 Adds a command to the bot.
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
+**Returns**: <code>Object</code> - The bot's commands.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -127,7 +131,7 @@ Adds a command to the bot.
 
 <a name="Bot+init"></a>
 
-### bot.init(token)
+### bot.init(token) ⇒ [<code>Bot</code>](#Bot)
 Initiates the bot using an authentication token.
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
@@ -138,7 +142,7 @@ Initiates the bot using an authentication token.
 
 <a name="Bot+setPrefix"></a>
 
-### bot.setPrefix(prefix)
+### bot.setPrefix(prefix) ⇒ [<code>Bot</code>](#Bot)
 Sets the bot's prefix for use in message based commands (E.g. '#help').
 Does not affect slash commands.
 
@@ -150,10 +154,11 @@ Does not affect slash commands.
 
 <a name="Bot+set"></a>
 
-### bot.set(prop, val)
+### bot.set(prop, val) ⇒ [<code>Bot</code>](#Bot)
 Sets a property in the bot's config to a value.
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
+**Returns**: [<code>Bot</code>](#Bot) - The bot.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -177,3 +182,32 @@ Internal function to create an embed object to send in a message from an opts ob
 A class that represents a command.
 
 **Kind**: global class  
+
+* [Command](#Command)
+    * [.test(text)](#Command+test) ⇒ <code>Object</code>
+    * [.run(...args)](#Command+run) ⇒ <code>Object</code>
+
+<a name="Command+test"></a>
+
+### command.test(text) ⇒ <code>Object</code>
+Tests a command on text or interaction arguments.
+
+**Kind**: instance method of [<code>Command</code>](#Command)  
+**Returns**: <code>Object</code> - An object which either contains {error: true, message: "MESSAGE_HERE"} or {error: false, ...arguments}, where arguments are the arguments that were parsed from the command.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| text | <code>String</code> \| <code>Object</code> | The text or arguments (from an interaction) to test. |
+
+<a name="Command+run"></a>
+
+### command.run(...args) ⇒ <code>Object</code>
+Runs a command using the specified arguments.
+
+**Kind**: instance method of [<code>Command</code>](#Command)  
+**Returns**: <code>Object</code> - An object with title and description for the embed which should be sent in response, or the return value of the command's run function if it is an object and represents a discord embed.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ...args | <code>any</code> | The arguments that are passed to the run function of the command |
+
