@@ -87,6 +87,7 @@ class Bot {
 	 * Listens for an event emitted through 'bot.dispatch("event", "data")'.
 	 * @param {String} event The event to listen for.
 	 * @param {Function} callback The callback to run when the event happens.
+	 * @returns {Object} Returns an object with a remove function, which removes the current listener. 
 	 */
 	addListener(event, callback) {
 		this.listeners[event] = this.listeners[event] || [];
@@ -103,6 +104,7 @@ class Bot {
 	 * Calls all the listeners added by 'addListener' matching the event dispatched. (Note: This function is mostly internal, if you want to use it to manually trigger events though, be my guest!)
 	 * @param {String} event The event to dispatch.
 	 * @param  {...any} data The data to send with the event.
+	 * @returns {Object[]} Returns all the listeners that are currently listening to the event given.
 	 */
 	dispatch(event, ...data) {
 		var listeners = this.listeners[event];
@@ -110,9 +112,11 @@ class Bot {
 		for (let fn of listeners) {
 			fn.function(...(data || []));
 		}
+		return listeners;
 	}
 	/**
 	 * Initiates slash commands
+	 * @returns {Bot}
 	 */
 	async initSlash() {
 		this.dispatch("init_slash");
@@ -195,6 +199,7 @@ class Bot {
 					},
 				});
 		});
+		return this
 	}
 	/**
 	 * Internal function to run a command in a channel, with a message or interaction. For the most part leave this alone.
@@ -203,7 +208,8 @@ class Bot {
 	 * @param {String} params.content The content of the message that was sent.
 	 * @param {Message} params.message A discord.js message object with details about the message sent.
 	 * @param {Interaction} params.interaction A discord.js interaction object with info about the interaction if the event that triggered this command was an interaction.
-	 */
+	* @returns {DiscordMessageObject|RunCommandOutput} Returns either a discord.js message object or the output of a 'command.run(__)' function.
+	*/
 	runCommand({ channel, content, message, interaction }) {
 		this.dispatch("run_command", { channel, content, message, interaction });
 		for (let item of this.commands) {
@@ -294,6 +300,7 @@ class Bot {
 	/**
 	 * Internal function to create an embed object to send in a message from an opts object/string
 	 * @param {String|Object} opts The options object.
+	 * @returns {Object} An object that can be sent by 'channel.send(embedObj)'
 	 */
 	embed(opts) {
 		if (typeof opts === "string") {
