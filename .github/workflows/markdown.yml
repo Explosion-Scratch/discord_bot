@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: sudo npm i -g jsdoc-to-markdown
+      - run: ls
+      - run: pwd
       - run: jsdoc2md index.js > documentation.md
       - run: cat start.md documentation.md >> README.md
       - uses: stefanzweifel/git-auto-commit-action@v4
