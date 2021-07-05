@@ -1,9 +1,12 @@
 # discord_bot
-SUPER useful discord bot engine! Create a bot with integrated slash commands easily!
+SUPER useful discord bot engine! Create a bot with integrated slash commands easily! P.S. Did I mention it uses embeds? 😏
 
 
-# README COMING SOON:
-Here's some example code:
+# Example
+<details>
+<summary>Show</summary>
+Here's some example code 😃:
+	
 ```js
 
 var bot = new Bot();
@@ -89,3 +92,7 @@ bot.onready = () => {
 	bot.initSlash();
 };
 ```
+</details>
+
+
+# Documentation:
