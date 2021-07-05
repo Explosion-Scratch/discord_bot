@@ -33,7 +33,7 @@ class Bot {
 		if (this.onInitSlash) {
 			this.onInitSlash();
 		}
-		var guildId = "838149475477618699";
+		var guildId = this.config.guildId || undefined;
 		var getApp = (guildId) => {
 			const app = this.client.api.applications(this.client.user.id);
 			if (guildId) {
