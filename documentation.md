@@ -20,15 +20,15 @@ A class that represents a discord bot.
     * [.findUser(query)](#Bot+findUser) ⇒ <code>DiscordUserObject</code>
     * [.dm([user], msg)](#Bot+dm) ⇒ <code>DiscordMessageObject</code>
     * [.findChannel(query)](#Bot+findChannel) ⇒ <code>DiscordChannelObject</code>
-    * [.addListener(event, callback)](#Bot+addListener)
-    * [.dispatch(event, ...data)](#Bot+dispatch)
-    * [.initSlash()](#Bot+initSlash)
-    * [.runCommand(params)](#Bot+runCommand)
+    * [.addListener(event, callback)](#Bot+addListener) ⇒ <code>Object</code>
+    * [.dispatch(event, ...data)](#Bot+dispatch) ⇒ <code>Array.&lt;Object&gt;</code>
+    * [.initSlash()](#Bot+initSlash) ⇒ [<code>Bot</code>](#Bot)
+    * [.runCommand(params)](#Bot+runCommand) ⇒ <code>DiscordMessageObject</code> \| <code>RunCommandOutput</code>
     * [.addCommand(command)](#Bot+addCommand) ⇒ <code>Object</code>
     * [.init(token)](#Bot+init) ⇒ [<code>Bot</code>](#Bot)
     * [.setPrefix(prefix)](#Bot+setPrefix) ⇒ [<code>Bot</code>](#Bot)
     * [.set(prop, val)](#Bot+set) ⇒ [<code>Bot</code>](#Bot)
-    * [.embed(opts)](#Bot+embed)
+    * [.embed(opts)](#Bot+embed) ⇒ <code>Object</code>
 
 <a name="Bot+findUser"></a>
 
@@ -69,10 +69,11 @@ Finds a channel based on a query.
 
 <a name="Bot+addListener"></a>
 
-### bot.addListener(event, callback)
+### bot.addListener(event, callback) ⇒ <code>Object</code>
 Listens for an event emitted through 'bot.dispatch("event", "data")'.
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
+**Returns**: <code>Object</code> - Returns an object with a remove function, which removes the current listener.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -81,10 +82,11 @@ Listens for an event emitted through 'bot.dispatch("event", "data")'.
 
 <a name="Bot+dispatch"></a>
 
-### bot.dispatch(event, ...data)
+### bot.dispatch(event, ...data) ⇒ <code>Array.&lt;Object&gt;</code>
 Calls all the listeners added by 'addListener' matching the event dispatched. (Note: This function is mostly internal, if you want to use it to manually trigger events though, be my guest!)
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
+**Returns**: <code>Array.&lt;Object&gt;</code> - Returns all the listeners that are currently listening to the event given.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -93,16 +95,17 @@ Calls all the listeners added by 'addListener' matching the event dispatched. (N
 
 <a name="Bot+initSlash"></a>
 
-### bot.initSlash()
+### bot.initSlash() ⇒ [<code>Bot</code>](#Bot)
 Initiates slash commands
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
 <a name="Bot+runCommand"></a>
 
-### bot.runCommand(params)
+### bot.runCommand(params) ⇒ <code>DiscordMessageObject</code> \| <code>RunCommandOutput</code>
 Internal function to run a command in a channel, with a message or interaction. For the most part leave this alone.
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
+**Returns**: <code>DiscordMessageObject</code> \| <code>RunCommandOutput</code> - Returns either a discord.js message object or the output of a 'command.run(__)' function.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -167,10 +170,11 @@ Sets a property in the bot's config to a value.
 
 <a name="Bot+embed"></a>
 
-### bot.embed(opts)
+### bot.embed(opts) ⇒ <code>Object</code>
 Internal function to create an embed object to send in a message from an opts object/string
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
+**Returns**: <code>Object</code> - An object that can be sent by 'channel.send(embedObj)'  
 
 | Param | Type | Description |
 | --- | --- | --- |
