@@ -3,23 +3,26 @@ class Bot {
 		this.Discord = require("discord.js");
 		this.client = new this.Discord.Client();
 		this.commands = [];
+		this.listeners = {};
+		this.info = {
+			channel: null,
+			message: null,
+			author: null,
+		};
 		this.config = {
 			color: 0x00bbbb,
 		};
 		this.client.on("ready", () => {
-			if (this.onready) {
-				this.onready();
-			}
+			this.dispatch("ready");
 			this.status = "ready";
 		});
 		this.client.on("message", (message) => {
-			if (this.onmessage) {
-				this.onmessage();
-			}
+			this.dispatch("message", message);
+			this.info.author = message.member;
+			this.info.message = message;
+			this.info.channel = message.channel.id;
 			if (message.author.bot && this.config.allowBots !== true) {
-				if (this.onbot) {
-					this.onbot(message);
-				}
+				this.dispatch("bot_message", message);
 				return;
 			}
 			this.runCommand({
@@ -29,11 +32,52 @@ class Bot {
 			});
 		});
 	}
-	async initSlash() {
-		if (this.onInitSlash) {
-			this.onInitSlash();
+	findUser(query) {
+		console.log(JSON.stringify(this.client.users, null, 2));
+		if (typeof query === "function") {
+			return this.client.users.cache.find(query);
 		}
-		var guildId = this.config.guildId || undefined;
+		if (typeof query === "string") {
+			return this.client.users.cache.find(
+				(i) =>
+					i.username.toLowerCase() === query.toLowerCase() ||
+					i.id == query ||
+					i.tag.toLowerCase() === query.toLowerCase(),
+			);
+		}
+		return {
+			error: true,
+			message: "Please provide a string or a find function.",
+		};
+	}
+	dm(user, msg) {
+		user = user || this.info.author;
+		this.findUser(user).send(msg);
+	}
+	findChannel(query) {
+		return this.client.channels.cache.find(query);
+	}
+	addListener(event, callback) {
+		this.listeners[event] = this.listeners[event] || [];
+		var id = Math.random();
+		this.listeners[event].push({ function: callback, id });
+		return {
+			remove: () => {
+				var item = this.listeners[event].find((i) => i.id === id);
+				this.listeners[event].splice(this.listeners[event].indexOf(item), 1);
+			},
+		};
+	}
+	dispatch(event, ...data) {
+		var listeners = this.listeners[event];
+		if (!listeners) return;
+		for (let fn of listeners) {
+			fn.function(...(data || []));
+		}
+	}
+	async initSlash() {
+		this.dispatch("init_slash");
+		var guildId = "838149475477618699";
 		var getApp = (guildId) => {
 			const app = this.client.api.applications(this.client.user.id);
 			if (guildId) {
@@ -66,17 +110,16 @@ class Bot {
 			var res = await getApp(guildId)
 				.commands.post({ data: command })
 				.catch((e) => {
-					if (this.onSlashError) {
-						this.onSlashError(e);
-					}
+					this.dispatch("slash_error", e);
 					console.log("Error:");
 					console.error(e.message);
 				});
 		}
 		this.client.ws.on("INTERACTION_CREATE", async (interaction) => {
-			if (this.oninteraction) {
-				this.oninteraction(interaction);
-			}
+			this.dispatch("interaction", interaction);
+			this.info.interaction = interaction;
+			this.info.author = interaction.member;
+			this.info.channel = interaction.channel_id;
 			var _args = interaction.data.options;
 			if (!_args) {
 				var embed = this.runCommand({
@@ -115,20 +158,16 @@ class Bot {
 		});
 	}
 	runCommand({ channel, content, message, interaction }) {
-		if (this.onRunCommand) {
-			this.onRunCommand({ channel, content, message, interaction });
-		}
+		this.dispatch("run_command", { channel, content, message, interaction });
 		for (let item of this.commands) {
 			var command = new Command(item, this.config.prefix);
 			var out = command.test(content);
 			if (out.error) {
-				if (this.onMessageError) {
-					this.onmessageerror(out);
-				}
+				this.dispatch("message_error", out);
 			} else {
 				if (channel) {
 					return channel.send(
-						embed(
+						this.embed(
 							command.run({
 								args: { ...out },
 								message,
@@ -174,6 +213,14 @@ class Bot {
 		}
 		this.config[prop] = val;
 	}
+	embed(opts) {
+		if (typeof opts === "string") {
+			return { embed: { description: opts } };
+		}
+		return {
+			embed: { ...opts, color: this.config.color },
+		};
+	}
 }
 class Command {
 	constructor(command, prefix) {
@@ -193,6 +240,13 @@ class Command {
 		}
 		var sections = text.match(/(?:[^\s"]+|"[^"]*")+/g);
 		this.sections = sections;
+		if (!sections) {
+			return {
+				error: true,
+				message: "Message has no content",
+				code: "no_content",
+			};
+		}
 		if (!this.sections[0].startsWith(this.prefix)) {
 			return {
 				error: true,
@@ -241,9 +295,4 @@ class Command {
 			description: _.description || this.command.description,
 		};
 	}
-}
-function embed(opts) {
-	return {
-		embed: { ...opts, color: 0x00bbbb },
-	};
 }
