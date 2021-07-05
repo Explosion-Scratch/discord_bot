@@ -1,0 +1,14 @@
+on:
+  push:
+name: Generate markdown from JSDocs
+jobs:
+  run:
+    name: Generate markdown
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo npm i -g jsdoc-to-markdown
+      - run: jsdoc2md index.js > documentation.md
+      - run: cat start.md documentation.md >> README.md
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Generate docs"
