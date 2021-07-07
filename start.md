@@ -133,7 +133,7 @@ bot.addCommand({
 ```
 If you want slash commands then also add this:
 ```js
-bot.addListener("ready", () => {
+bot.addEventListener("ready", () => {
   console.log("Bot ready");
   bot.initSlash();
 })
@@ -142,3 +142,4 @@ bot.addListener("ready", () => {
 
 
 # Documentation:
+
