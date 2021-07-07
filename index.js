@@ -89,7 +89,7 @@ class Bot {
 	 * @param {Function} callback The callback to run when the event happens.
 	 * @returns {Object} Returns an object with a remove function, which removes the current listener. 
 	 */
-	addListener(event, callback) {
+	addEventListener(event, callback) {
 		this.listeners[event] = this.listeners[event] || [];
 		var id = Math.random();
 		this.listeners[event].push({ function: callback, id });
@@ -101,7 +101,7 @@ class Bot {
 		};
 	}
 	/**
-	 * Calls all the listeners added by 'addListener' matching the event dispatched. (Note: This function is mostly internal, if you want to use it to manually trigger events though, be my guest!)
+	 * Calls all the listeners added by 'addEventListener' matching the event dispatched. (Note: This function is mostly internal, if you want to use it to manually trigger events though, be my guest!)
 	 * @param {String} event The event to dispatch.
 	 * @param  {...any} data The data to send with the event.
 	 * @returns {Object[]} Returns all the listeners that are currently listening to the event given.
