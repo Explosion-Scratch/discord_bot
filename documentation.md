@@ -20,7 +20,7 @@ A class that represents a discord bot.
     * [.findUser(query)](#Bot+findUser) ⇒ <code>DiscordUserObject</code>
     * [.dm([user], msg)](#Bot+dm) ⇒ <code>DiscordMessageObject</code>
     * [.findChannel(query)](#Bot+findChannel) ⇒ <code>DiscordChannelObject</code>
-    * [.addListener(event, callback)](#Bot+addListener) ⇒ <code>Object</code>
+    * [.addEventListener(event, callback)](#Bot+addEventListener) ⇒ <code>Object</code>
     * [.dispatch(event, ...data)](#Bot+dispatch) ⇒ <code>Array.&lt;Object&gt;</code>
     * [.initSlash()](#Bot+initSlash) ⇒ [<code>Bot</code>](#Bot)
     * [.runCommand(params)](#Bot+runCommand) ⇒ <code>DiscordMessageObject</code> \| <code>RunCommandOutput</code>
@@ -67,9 +67,9 @@ Finds a channel based on a query.
 | --- | --- | --- |
 | query | <code>function</code> | The find function to find the channel (this command still very much WIP.) |
 
-<a name="Bot+addListener"></a>
+<a name="Bot+addEventListener"></a>
 
-### bot.addListener(event, callback) ⇒ <code>Object</code>
+### bot.addEventListener(event, callback) ⇒ <code>Object</code>
 Listens for an event emitted through 'bot.dispatch("event", "data")'.
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
@@ -83,7 +83,7 @@ Listens for an event emitted through 'bot.dispatch("event", "data")'.
 <a name="Bot+dispatch"></a>
 
 ### bot.dispatch(event, ...data) ⇒ <code>Array.&lt;Object&gt;</code>
-Calls all the listeners added by 'addListener' matching the event dispatched. (Note: This function is mostly internal, if you want to use it to manually trigger events though, be my guest!)
+Calls all the listeners added by 'addEventListener' matching the event dispatched. (Note: This function is mostly internal, if you want to use it to manually trigger events though, be my guest!)
 
 **Kind**: instance method of [<code>Bot</code>](#Bot)  
 **Returns**: <code>Array.&lt;Object&gt;</code> - Returns all the listeners that are currently listening to the event given.  
