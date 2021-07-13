@@ -1,9 +1,4 @@
-# Discord bot engine
-
-
-<p align="center"><img src="https://user-images.githubusercontent.com/61319150/125470380-65a1d35d-4e48-477f-af25-f6ccb214aed8.png" align="center"></p>
-
-
+# discord_bot
 SUPER useful discord bot engine! Create a bot with integrated slash commands easily! P.S. Did I mention it uses embeds? 😏
 
 
